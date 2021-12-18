@@ -46,7 +46,7 @@ void setup() {
 }
 
 void loop() {
-  loadingLight();
+  turningLight();
 }
 
 void remote(){
@@ -78,11 +78,11 @@ void turningLight(){
       j = 0;
     }
     pixels.setPixelColor(i, pixels.Color(colors2[j][0], colors2[j][1], colors2[j][2]));
-    pixels.setPixelColor(i+1, pixels.Color(colors2[j+1][0], colors2[j+1][1], colors2[j+1][2]));
-    pixels.setPixelColor(i+2, pixels.Color(colors2[j+2][0], colors2[j+2][1], colors2[j+2][2]));
+    pixels.setPixelColor(i+1, pixels.Color(colors2[j][0], colors2[j][1], colors2[j][2]));
+    pixels.setPixelColor(i+2, pixels.Color(colors2[j][0], colors2[j][1], colors2[j][2]));
     pixels.setBrightness(brightness);
     pixels.show();
-    j+=3;
+    j++;
   }
   delay(changingSpeed);
   j--;

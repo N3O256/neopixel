@@ -5,7 +5,7 @@
 RF24 radio(9, 10); // CE, CSN (5, 6)
 const byte address[6] = "00001";
 
-String s;
+int s = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -13,6 +13,7 @@ void setup() {
   radio.begin();                      //Starting the Wireless communication
   radio.openReadingPipe(0, address);  //Setting the address where we will send the data
   radio.setPALevel(RF24_PA_MIN);      //You can set it as minimum or maximum depending on the distance between the transmitter and receiver.
+  radio.setChannel(115);
   radio.startListening();
 }
 
@@ -23,4 +24,5 @@ void loop() {
   }else{
     Serial.println("not available");
   }
+  delay(500);
 }

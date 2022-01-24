@@ -1,15 +1,3 @@
-#include <Adafruit_NeoPixel.h>
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-
-RF24 radio(4, 5); // CE (4), CSN (5)
-const byte address[6] = "00001";
-
-int xAxis = 0;
-int yAxis = 0;
-boolean buttonAxis;
-
 boolean button1;
 boolean button2;
 boolean button3;
@@ -29,6 +17,8 @@ int colors2[10][3] = {{255, 0, 0}, {255, 66, 0}, {255, 255, 0},
                     {255, 0, 255},
                     {255, 0, 129}, {255, 0, 66}};
 
+int j = 0;
+
 void setup() {
   pixels.begin();
 
@@ -42,7 +32,7 @@ void setup() {
 }
 
 void loop() {
-  remote();
+  receive();
 }
 
 void remote(){
@@ -178,15 +168,33 @@ void receive(){
     radio.read(&yAxis, sizeof(yAxis));
     radio.read(&buttonAxis, sizeof(buttonAxis));
 
+    Serial.print("X: ");
+    Serial.print(xAxis);
+    Serial.print("     Y: ");
+    Serial.print(yAxis);
+    Serial.print("     Button: ");
+    Serial.println(buttonAxis);
+
     radio.read(&button1, sizeof(button1));
     radio.read(&button2, sizeof(button2));
     radio.read(&button3, sizeof(button3));
 
+    Serial.print("B1: ");
+    Serial.print(button1);
+    Serial.print("     B2: ");
+    Serial.print(button2);
+    Serial.print("     B3: ");
+    Serial.println(button3);
+
     radio.read(&brightness, sizeof(brightness));
     radio.read(&changingSpeed, sizeof(changingSpeed));
 
+    Serial.print("bright: ");
+    Serial.print(brightness);
+    Serial.print("     speed: ");
     Serial.println(changingSpeed);
   }else{
     Serial.println("not available");
   }
+  delay(500);
 }

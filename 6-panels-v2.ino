@@ -34,6 +34,8 @@ int colors2[10][3] = {{255, 0, 0}, {255, 66, 0}, {255, 255, 0},
 
 int j = 0;
 
+char c[8];
+
 void setup() {
   pixels.begin();
 
@@ -42,7 +44,6 @@ void setup() {
   radio.begin();                      //Starting the Wireless communication
   radio.openReadingPipe(0, address);  //Setting the address where we will send the data
   radio.setPALevel(RF24_PA_MIN);      //You can set it as minimum or maximum depending on the distance between the transmitter and receiver.
-  radio.setChannel(115);
   radio.startListening();
 }
 
@@ -203,11 +204,14 @@ void receive(){
 
     radio.read(&brightness, sizeof(brightness));
     radio.read(&changingSpeed, sizeof(changingSpeed));
+    radio.read(&c, sizeof(c));
 
     Serial.print("bright: ");
     Serial.print(brightness);
     Serial.print("     speed: ");
     Serial.println(changingSpeed);
+    Serial.println(c);
+    Serial.println("");
   }else{
     Serial.println("not available");
   }

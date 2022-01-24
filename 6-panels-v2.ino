@@ -1,3 +1,18 @@
+#include <Adafruit_NeoPixel.h>
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+
+#define PIN 2
+#define NUMPIXELS 48
+
+RF24 radio(4, 5); // CE (4), CSN (5)
+const byte address[6] = "00001";
+
+int xAxis = 0;
+int yAxis = 0;
+boolean buttonAxis;
+
 boolean button1;
 boolean button2;
 boolean button3;

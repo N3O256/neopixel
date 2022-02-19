@@ -1,3 +1,5 @@
+#include <SPI.h>
+#include <nRF24L01.h>
 #include <RF24.h>
 
 RF24 radio(9, 10); // CE, CSN (9, 10)
@@ -17,8 +19,11 @@ boolean button3Last = false;
 
 int receive = 0;
 int transmit = 0;
+int number = 0;
 
 void setup() {
+  Serial.begin(9600);
+  
   radio.begin();                  //Starting the Wireless communication
   radio.openWritingPipe(address); //Setting the address where we will send the data
   radio.setPALevel(RF24_PA_MIN);  //You can set it as minimum or maximum depending on the distance between the transmitter and receiver.
@@ -29,7 +34,11 @@ void setup() {
 void loop() {
   readValues();
   transmit = getChanges();
-  radio.write(&transmit, sizeof(transmit));
+  if(!radio.write(&transmit, sizeof(transmit))){
+    Serial.println("It didn't work");
+  }else{
+    Serial.println(transmit);
+  }
 }
 
 void readValues(){
@@ -43,37 +52,28 @@ int getChanges(){
   if(button1 != button1Last){
     receive = 1;
     button1Last = button1;
-  }else{
-    receive = 0;
   }
 
   if(button2 != button2Last){
     receive = 2;
     button2Last = button2;
-  }else{
-    receive = 0;
   }
 
   if(button3 != button3Last){
     receive = 3;
     button3Last = button3;
-  }else{
-    receive = 0;
   }
 
   if(buttonAxis != buttonAxisLast){
-    receive = getIntValueOfCustom();
+    getIntValueOfCustom();
+    receive = number;
     buttonAxisLast = buttonAxis;
-  }else{
-    receive = 0;
   }
 
   return receive;
 }
 
-int getIntValueOfCustom(){
-  int number = 0;
-  
+void getIntValueOfCustom(){  
   xAxis1 = analogRead(A2);
   map(xAxis1, 0, 1023, -18, 18);
   
@@ -109,6 +109,4 @@ int getIntValueOfCustom(){
   }else if(yAxis1 < 6 && xAxis1 > 0){
     number = 16;
   }
-
-  return number;
 }

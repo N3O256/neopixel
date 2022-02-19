@@ -9,7 +9,12 @@
 RF24 radio(4, 5); // CE (4), CSN (5)
 const byte address[6] = "00001";
 
-int receive = 0;
+int transmit = 3;
+int lastState = transmit;
+
+int brightness = 100;
+int changingSpeed = 200;
+
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -36,20 +41,21 @@ void setup() {
 }
 
 void loop() {
-  receive();
+  remote();
 }
 
 void remote(){
-  receive();
+  receive1();
+  lastState = transmit;
 
-  if(receive == 1){
+  if(lastState == 1){
     loadingLight();
-  }else if(receive == 2){
+  }else if(lastState == 2){
     turningLight();
-  }else if(receive == 3){
+  }else if(lastState == 3){
     whiteLight();
-  }else if(receive > 3 && receive < 17){
-    customLight();
+  }else if(lastState > 3 && lastState < 17){
+    customColor();
   }
   
 }
@@ -74,57 +80,57 @@ void customColor(){
   int r = 0;
   int g = 0;
   int b = 0;
-  if(receive = 4){
+  if(lastState = 4){
     r = 255;
     g = 255;
     b = 255;
-  }else if(receive = 5){
+  }else if(lastState = 5){
     r = 0;
     g = 255;
     b = 150;
-  }else if(receive = 6){
+  }else if(lastState = 6){
     r = 0;
     g = 255;
     b = 0;
-  }else if(receive = 7){
+  }else if(lastState = 7){
     r = 255;
     g = 255;
     b = 0;
-  }else if(receive = 8){
+  }else if(lastState = 8){
     r = 255;
     g = 170;
     b = 0;
-  }else if(receive = 9){
+  }else if(lastState = 9){
     r = 255;
     g = 120;
     b = 0;
-  }else if(receive = 10){
+  }else if(lastState = 10){
     r = 255;
     g = 0;
     b = 0;
   }
 
-  else if(receive = 11){
+  else if(lastState = 11){
     r = 255;
     g = 0;
     b = 255;
-  }else if(receive = 12){
+  }else if(lastState = 12){
     r = 160;
     g = 0;
     b = 255;
-  }else if(receive = 13){
+  }else if(lastState = 13){
     r = 0;
     g = 0;
     b = 255;
-  }else if(receive = 14){
+  }else if(lastState = 14){
     r = 0;
     g = 130;
     b = 255;
-  }else if(receive = 15){
+  }else if(lastState = 15){
     r = 0;
     g = 255;
     b = 255;
-  }else if(receive = 16){
+  }else if(lastState = 16){
     r = 0;
     g = 255;
     b = 210;
@@ -158,9 +164,10 @@ void whiteLight(){
   pixels.show();
 }
 
-void receive(){
+void receive1(){
   if(radio.available()){
-    radio.read(&receive, sizeof(receive));
+    radio.read(&transmit, sizeof(transmit));
+    Serial.println(transmit);
   }else{
     Serial.println("not available");
   }

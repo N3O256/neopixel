@@ -171,5 +171,4 @@ void receive1(){
   }else{
     Serial.println("not available");
   }
-  delay(500);
 }

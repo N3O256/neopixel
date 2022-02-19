@@ -13,7 +13,7 @@ int transmit = 3;
 int lastState = transmit;
 
 int brightness = 100;
-int changingSpeed = 200;
+int changingSpeed = 100;
 
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
@@ -151,9 +151,9 @@ void loadingLight(){
       pixels.setBrightness(brightness);
       pixels.show();
       delay(changingSpeed);
-      //updateValues();
     }
   }
+  receive1();
 }
 
 void whiteLight(){
